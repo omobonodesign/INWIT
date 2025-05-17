@@ -16,7 +16,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Dati Chiave Estratti ---
+# --- Dati Chiave Estratti dal TIKR report ---
 TICKER = "INWIT.MI"
 NOME_SOCIETA = "INWIT S.p.A. (Infrastrutture Wireless Italiane)"  
 SETTORE = "Infrastrutture di Telecomunicazione - Tower Company"
@@ -29,12 +29,12 @@ CRESCITA_DPS_PROGRAMMATA = "+7.5% annuo fino al 2026"
 YIELD_ATTUALE = round((ULTIMO_DPS_PAGATO_VAL / PREZZO_RIFERIMENTO_APPROX) * 100, 2)
 DIVIDEND_CAGR_2015_2023 = 30.0  # Crescita composta annua dal 2015
 
-# Dati storici Dividendo Per Azione (DPS) - da TIKR
+# Dati storici Dividendo Per Azione (DPS) - aggiornati dai dati TIKR
 dps_storico_data = {
     'Anno Esercizio': [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
-    'DPS (€)': [0.09, 0.15, 0.19, 0.21, 0.73, 0.30, 0.32, 0.35, 0.48, 0.48],  # 2019 include straordinario
+    'DPS (€)': [0.09, 0.15, 0.19, 0.21, 0.73, 0.30, 0.32, 0.35, 0.48, 0.48],  # Dati correrti da TIKR
     'DPS Ordinario (€)': [0.09, 0.15, 0.19, 0.21, 0.13, 0.30, 0.32, 0.35, 0.48, 0.48],
-    'DPS Straordinario (€)': [0.0, 0.0, 0.0, 0.0, 0.59, 0.0, 0.0, 0.0, 0.0, 0.0],
+    'DPS Straordinario (€)': [0.0, 0.0, 0.0, 0.0, 0.60, 0.0, 0.0, 0.0, 0.0, 0.0],
     'Tipo': ['Storico', 'Storico', 'Storico', 'Storico', 'Storico', 'Storico', 'Storico', 'Storico', 'Storico', 'Atteso']
 }
 df_dps = pd.DataFrame(dps_storico_data)
@@ -65,7 +65,7 @@ fin_data = {
         0.0,     # Net Cash position
         0.0,     # ND/EBITDA
         0.73,    # DPS (include extra)
-        150.8    # Payout ratio including extra
+        150.8    # Payout ratio
         ],
     '2020': [
         663.4,   # Revenue (fusione Vodafone)
@@ -220,6 +220,40 @@ st.markdown("""
     font-size: 2rem;
     color: #1f77b4;
 }
+.analysis-section {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 5px solid #1f77b4;
+    margin: 1rem 0;
+    font-size: 16px;
+    line-height: 1.6;
+}
+.section-title {
+    color: #1f77b4;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+}
+.highlight-section {
+    background-color: #e7f3ff;
+    border-left: 5px solid #2e86ab;
+}
+.key-points {
+    background-color: #f0f8ff;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+.metric-highlight {
+    background-color: #e8f5e9;
+    padding: 0.5rem;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0.2rem;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -361,7 +395,7 @@ if section_id == "dividends":
     <strong>🔍 Key Insights sui Dividendi:</strong>
     <ul>
     <li><strong>Crescita Costante</strong>: Il dividendo ordinario è cresciuto da €0.09 (2015) a €0.48 (2023), con CAGR del 30%</li>
-    <li><strong>Straordinario 2019</strong>: €0.59 extra distribuiti grazie alla fusione Vodafone per ottimizzare la struttura</li>
+    <li><strong>Straordinario 2019</strong>: €0.60 extra distribuiti grazie alla fusione Vodafone per ottimizzare la struttura</li>
     <li><strong>Policy Chiara</strong>: +7.5% annuo confermato fino al 2026 (DPS atteso €0.555 nel 2025)</li>
     <li><strong>Sostenibilità</strong>: Il payout è coperto dall'80% del FCF, lasciando margine per crescita e deleveraging</li>
     </ul>
@@ -400,7 +434,7 @@ elif section_id == "performance":
         ))
         
         fig_revenue.add_annotation(
-            x='2020', y=663,
+            x='2020', y=663.4,
             text="Fusione<br>Vodafone",
             showarrow=True,
             font=dict(color="red"),
@@ -903,203 +937,32 @@ elif section_id == "peer_comparison":
 # --- Sezione: Analisi Completa ---
 elif section_id == "full_analysis":
     st.subheader("📋 Analisi Completa di INWIT")
+
+    # Funzione per caricare il file di testo - qui legge l'intero contenuto
+    def load_analysis_text(filename="Analisi_INWIT.md"):
+        try:
+            with open(filename, 'r', encoding='utf-8') as file:
+                return file.read()
+        except FileNotFoundError:
+            # Contenuto fallback in caso il file non sia disponibile
+            return """
+            # Analisi non disponibile
+            
+            Il file di analisi non è stato trovato. Assicurarsi che il file "Analisi_INWIT.md" sia nella stessa directory dell'applicazione.
+            """
     
-    # Caricamento del contenuto dall'analisi completa
-    analysis_content = """
-Executive Summary
-INWIT (Infrastrutture Wireless Italiane, ticker INW), principale gestore di torri per telecomunicazioni mobile in Italia, presenta un profilo finanziario solido orientato al rendimento da dividendo. L'azienda, nata dallo spin-off torri TIM nel 2015 e fusa con le torri Vodafone nel 2020, eroga un dividendo in costante crescita (+7,5% annuo guidato fino al 2026) con un rendimento attuale ~4,5%, superiore alla media del FTSE MIB (~3,8%). La crescita dei flussi di cassa operativi (FCF ricorrente 2023 ~€611 mln) e la natura essenziale dei suoi servizi sostengono la stabilità e qualità del dividendo, coperto ~75% dal FCF. INWIT opera con contratti di lungo termine indicizzati all'inflazione e un portafoglio clienti concentrato sugli operatori mobili principali (TIM, Vodafone come anchor tenant), con un elevato tenancy ratio (2,16x al 2022) indice di infrastrutture ampiamente condivise.
-Nonostante un leva finanziaria significativa (Indebitamento Fin. Netto/EBITDA ~4,7x) dovuta all'acquisizione delle torri Vodafone e ad un modello asset-heavy, la generazione di cassa è forte e resiliente, con margini EBITDA ~91% e margini EBITDAaL (post costi locativi) ~69% in miglioramento. Il piano industriale al 2026 (esteso al 2030) prevede investimenti mirati (€1,3 mld nel 2021-26) per sfruttare trend strutturali: crescita del traffico dati mobile, diffusione del 5G e densificazione di reti (DAS, small cells), consolidando così i ricavi con crescita "high single-digit" annua fino al 2026. Sul decennio, INWIT offre un profilo di rendimento totale attraente per l'investitore orientato al dividendo: l'analisi base prospetta un Total Shareholder Return (TSR) annuo medio nell'ordine del 7-9% (4-5% da dividendi + 3-4% crescita), con scenari ottimistici che potrebbero superare il 10% annuo.
-
-1. Descrizione Aziendale
-INWIT S.p.A. è la maggiore tower company italiana, con ~24.500 torri di telecomunicazione wireless e ~8.000 sistemi DAS/small cells distribuiti sul territorio nazionale. Fondata nel 2015 da Telecom Italia, la società è quotata alla Borsa di Milano (FTSE MIB dal 2020). Nel marzo 2020 INWIT ha incorporato Vodafone Towers Italia, raddoppiando dimensione e asset in gestione. Il core business consiste nell'hosting "Tower as a Service": INWIT realizza e gestisce infrastrutture passive (torri, tralicci, pali, siti indoor) affittandone spazio e servizi agli operatori mobili e altri broadcaster, in ottica multi-operatore neutrale. I ricavi provengono da contratti di lungo periodo con canoni periodici indicizzati all'inflazione (spesso con durata decennale rinnovabile), garantendo alta visibilità sul fatturato futuro. I clienti principali (≈80% dei ricavi) sono TIM e Vodafone (soci fondatori) con cui INWIT ha accordi pluriennali di servizio, seguiti dagli altri operatori mobili OLO (WindTre, Iliad) e da utilizzatori wholesale (FWA, IoT, enti radiotelevisivi).
-
-Il modello di business beneficia di forti economie di scala e di margini elevati: aggiungere nuovi tenant su una torre esistente comporta costi marginali ridotti, traducendosi in crescita quasi interamente incrementale dell'EBITDA. Ciò si riflette in un EBITDA margin 2022 ~91% (EBITDAaL ~69%), uno dei più alti in Europa. INWIT presenta inoltre capex relativamente contenuti (tipicamente 15-20% dei ricavi) focalizzati sull'espansione del portafoglio siti e sul miglioramento tecnologico (es. upgrade energetici, acquisto terreni). Ne consegue un robusto Free Cash Flow operativo (€491 mln ricorrente nel 2022, +34% YoY), che sostiene politiche di remunerazione agli azionisti attrattive. Dal 2020 la società distribuisce l'intero FCF disponibile tra dividendi e buyback, in linea con il posizionamento di "infrastructure yield company". La struttura finanziaria è caratterizzata da un indebitamento significativo ma efficiente, con costi medi del debito ~1.7% e duration pluriennale (grazie a due emissioni obbligazionarie per €1,75 mld nel 2020). INWIT opera con ~320 dipendenti e ha sede legale a Milano, uffici a Roma.
-
-2. Management & Governance
-Struttura azionaria. INWIT ha un capitale diffuso ma con due azionisti di riferimento: (1) Central Tower Holding Company B.V. detiene ~33,17% del capitale, ed è indirettamente co-controllata da Vodafone Group (via Vodafone GmbH) e dal consorzio Oak (KKR, GIP) – frutto della partnership avviata da Vodafone nel 2020 per la gestione congiunta delle torri; (2) Daphne 3 S.p.A. detiene ~29,9% del capitale, controllata al 90% dal consorzio Ardian (Impulse I) e 10% da Telecom Italia (TIM). Il flottante risulta ~37% (circa 355 milioni di azioni) diffuso tra investitori istituzionali internazionali. Questa composizione crea una situazione di controllo congiunto bilanciato: Vodafone/Oak e Ardian/TIM esprimono ciascuno 4 consiglieri nel CdA (su 11), mentre 3 consiglieri provengono da liste di minoranza indipendenti. Non vi è dunque un azionista unico di maggioranza, e i patti parasociali originali tra TIM e Vodafone sono decaduti dopo l'uscita di TIM dal controllo (2022). Ciò garantisce un governo societario equilibrato, con tutela dei soci di minoranza tramite rappresentanti indipendenti e comitati interni.
-
-Consiglio di Amministrazione e vertici. Il CdA nominato ad ottobre 2022 è presieduto da Oscar Cicchetti (Presidente non esecutivo, già dirigente TIM), espresso dall'azionista Ardian. Il ruolo di Chief Executive è di fatto ricoperto dal Direttore Generale Diego Galli, già CFO, cui sono delegate tutte le funzioni esecutive di gestione ordinaria. La scelta di un DG invece di un Amministratore Delegato formalmente nominato riflette l'accordo tra i soci per un assetto condiviso: secondo fonti Reuters il CEO precedente Giovanni Ferigo (proveniente da TIM) si è dimesso nel 2022 in seguito al riassetto proprietario, e si era previsto di selezionare un nuovo AD indicato da Vodafone, ma in assenza di un candidato esterno è stato promosso Galli come DG. Il CDA include inoltre figure di alto profilo come Sonia Hernandez (manager Vodafone) e consiglieri indipendenti qualificati in materie finanziarie e ESG.
-
-3. Piano Industriale & Strategia
-Linee strategiche 2023-2026: Il management ha confermato e aggiornato il piano industriale al 2026, proiettando crescita organica robusta grazie a trend strutturali favorevoli nel settore tower. In particolare, INWIT punta a: (a) Espansione del portafoglio siti – incremento di ~500 nuovi siti macro nei 4 anni 2023-26 (circa +2% annuo, portando le torri da ~23.000 a ~25.000), concentrati in aree strategiche per colmare gap di copertura 4G/5G e rispondere a progetti di densificazione urbana; (b) Aumento dei tenants per torre – proseguire l'aggiunta di nuovi hostings da parte di altri operatori ("OLO") sulle infrastrutture esistenti: si prevedono oltre 4.000 nuovi apparati installati all'anno, con focus su Iliad e Fastweb (FWA) come driver principali, elevando il tenancy ratio oltre l'attuale 2,16x verso ~2,3x nel 2026 (tra i più alti in Europa); (c) Coperture dedicate indoor e small cells – accelerare il dispiegamento di sistemi DAS (Distributed Antenna Systems) e micro-celle per fornire copertura in luoghi ad alta concentrazione di utenti (stadi, stazioni, ospedali, centri storici): il piano vede +2.000 unità remote DAS aggiuntive entro il 2026 (+~50%), intercettando la domanda crescente di connettività in spazi indoor e supportando iniziative "Smart City" (es. smart transportation); (d) Efficienza e controllo costi – implementare un importante programma di riduzione dei costi locativi: INWIT sta ri-negoziando i contratti d'affitto dei terreni e acquistando le proprietà di siti strategici per abbattere gli affitti passivi (oltre 2.000 terreni già acquisiti a fine 2022). Parallelamente, investe in infrastrutture energetiche proprietarie (es. installazione di pannelli solari e sistemi di alimentazione intelligente) per contenere i costi energetici e aumentare l'autosufficienza.
-
-Obiettivi finanziari: Il piano 2023-26 prevede ricavi in aumento del "high single-digit" medio annuo, superando €1,2 mld nel 2026 (da €853 mln nel 2022). L'EBITDA è atteso in crescita analoga (~+8-9% a €~0,92 mld nel 2026), con EBITDA margin stabile >91% e EBITDAaL in crescita ~11% annuo (a €~0,65-0,70 mld nel 2026) grazie alle efficienze. La Recurring Free Cash Flow (RFCF) dovrebbe salire a ~€680-700 mln nel 2026 (da €491 mln 2022), beneficiando anche di un regime fiscale agevolato temporaneo. Di conseguenza, la politica dividendi – che prevede DPS in aumento +7,5% annuo – è confermata fino al 2026 e già incorporata nei target.
-
-4. Outlook Macroeconomico & Tassi
-Il contesto macroeconomico italiano ed europeo costituisce un fattore chiave per valutare INWIT, data la sensibilità delle utility infrastrutturali a inflazione e tassi di interesse. Crescita economica: l'economia italiana mostra un ritmo moderato: dopo il rimbalzo post-pandemia (+6,6% PIL 2021), il PIL è rallentato a +3,7% nel 2022 e ~+0,7% stimato nel 2023, con previsione ~+1,1% nel 2024. Una crescita debole del PIL non incide direttamente sulla domanda di torri (trainata più da trend tecnologici che dal ciclo economico), ma può riflettersi sulla salute finanziaria degli operatori TLC.
-
-Inflazione: l'area Euro e l'Italia hanno visto un picco inflattivo nel 2022 (Italia IPC +8,7%) seguito da una gradual discesa (~5,5% nel 2023, attesa ~2-3% 2024-25). Per INWIT l'inflazione ha effetti positivi sui ricavi, grazie agli adeguamenti contrattuali annuali: la maggior parte dei canoni d'affitto torre è indicizzata (tipicamente all'ISTAT FOI) garantendo protezione. Al contempo, l'inflazione aumenta alcuni costi operativi (energia, affitti terreni – per questo INWIT sta acquistando i terreni per bloccare costi). Nel complesso l'azienda è relativamente inflation-hedged, con contratti "inflation-linked" che offrono protezione e supporto alla crescita anche in scenari inflattivi elevati.
-
-Tassi di interesse e mercati finanziari: Il drastico aumento dei tassi BCE dal 2022 (tasso depositi da -0,5% a +3,75% attuale) ha avuto un impatto significativo sul settore delle infrastrutture e su INWIT. Da un lato, il costo opportunità del capitale per gli investitori è salito: i titoli infrastrutturali a rendimento (bond proxy) hanno subito un repricing al ribasso dei multipli, perché i rendimenti obbligazionari concorrenti (es. BTP decennali ~4,2%) si sono avvicinati ai dividend yield equity. Ciò spiega la performance azionaria piatta/negativa di INWIT 2021-2022, nonostante i solidi fondamentali, a fronte di tassi in rapida crescita. Dall'altro lato, il costo del debito di INWIT è destinato ad aumentare gradualmente: la società ha finanziamenti a tasso fisso molto vantaggiosi, che proteggono nel breve; ma nuove emissioni o rifinanziamenti futuri avverranno a tassi superiori.
-
-5. Analisi PESTEL
-Politico: il settore delle telecomunicazioni è strategico in Italia e soggetto a attenzione governativa. La stabilità politica del Paese influisce relativamente poco sul core business di INWIT, ma il Governo può intervenire tramite Golden Power o politiche industriali. Il quadro politico attuale (Governo pro-impresa) è favorevole a investimenti digitali e alla condivisione di infrastrutture, con piani di incentivi (PNRR) per colmare il digital divide che indirettamente beneficiano i tower operator.
-
-Economico: coperto nella sezione precedente, il contesto economico incide via tassi, inflazione e salute dei clienti telco. L'andamento del settore telecom (ricavi degli MNO in calo da anni in Italia per forte competizione sui prezzi) può condizionare il potere contrattuale: gli operatori, sotto pressione, cercano di ridurre i costi di rete appoggiandosi a towerco come INWIT.
-
-Sociale: INWIT opera in un ambito con implicazioni sociali rilevanti. Da un lato, la società contribuisce positivamente allo sviluppo digitale del Paese: le sue infrastrutture abilitano copertura mobile avanzata, riducono il digital divide nelle aree rurali. D'altro canto, esiste una sensibilità pubblica sul tema elettrosmog e installazione di antenne: opposizioni locali (NIMBY) possono rallentare autorizzazioni di nuovi siti a causa di timori per la salute.
-
-Tecnologico: l'evoluzione tecnologica è un fattore chiave. 5G e oltre: la diffusione del 5G richiede una rete di siti più densa (soprattutto in città e per frequenze alte), spingendo domanda di DAS/small cells – opportunità per INWIT. Allo stesso tempo, tecnologie come il network sharing attivo (condivisione della rete radio tra operatori) potrebbero ridurre la necessità di torri duplicate.
-
-Ambientale: l'impatto ambientale e le politiche "green" assumono rilievo crescente. Le torri di INWIT hanno un impatto ambientale diretto relativamente limitato, ma l'azienda ha definito un piano di sostenibilità ambientale ambizioso. Consumo energetico: i siti attivi consumano elettricità per apparati e condizionamento; INWIT ha aumentato al 69% la quota di energia da fonti rinnovabili (2021) e mira al 100% rinnovabile in breve.
-
-Legale e Regolatorio: INWIT opera in un quadro regolamentare relativamente favorevole, poiché le attività di tower leasing non sono sottoposte a tariffazione regolata dall'AGCOM. Un importante fronte legale è l'ottenimento dei permessi per nuove installazioni: la burocrazia italiana può dilatare i tempi. Il D.L. Semplificazioni ha snellito alcune procedure per impianti di comunicazione, ma restano possibili ricorsi locali.
-
-6. Analisi delle 5 Forze di Porter
-Il settore di riferimento è quello delle infrastrutture di telecomunicazione passiva (torri), con caratteristiche assimilabili a una struttura duopolistica in Italia (INWIT e Cellnex come principali operatori).
-
-1. Rivalità tra concorrenti: Moderata. In Italia operano due grandi towerco multi-cliente: INWIT e Cellnex. La rivalità diretta è attenuata dal fatto che le torri sono asset localizzati: spesso INWIT e Cellnex dispongono di siti diversi in diverse aree, ciascuno ereditato dai propri operatori originari. Tuttavia, vi è concorrenza per nuove locazioni.
-
-2. Minaccia di nuovi entranti: Bassa. Avviare un nuovo towerco richiederebbe ingenti capitali e tempi lunghi. Il mercato è già quasi saturo: gli MNO hanno ceduto la quasi totalità delle torri esistenti ai due player dominanti. Un potenziale nuovo entrante potrebbe essere un fondo infrastrutturale acquisendo un portafoglio piccolo oppure costruendo torri greenfield.
-
-3. Potere contrattuale dei fornitori: Basso. I "fornitori" critici per INWIT includono i proprietari dei terreni dove sorgono le torri – INWIT paga affitti annuali; e i fornitori di apparati e servizi. I landlords sono spesso piccoli proprietari o enti locali: individualmente non hanno grande potere.
-
-4. Potere contrattuale dei clienti: Medio-Alto. I clienti di INWIT sono pochi e grandi – i 4 operatori mobili nazionali rappresentano la stragrande maggioranza del fatturato (TIM e Vodafone ~70% combinato). Ciò conferisce ai clienti un certo potere, mitigato però da contratti di lungo termine e costo/complessità di switch.
-
-5. Minacce di prodotti sostitutivi: Basse nel core business. Il "prodotto" di INWIT – ospitalità di antenne su siti elevati con copertura radioelettrica – ha pochi sostituti efficaci. Per coprire il territorio con segnali radio occorrono infrastrutture fisiche in posizione elevata.
-
-7. Andamento Storico dei Dividendi
-INWIT presenta una storia di dividendi in crescita costante, un aspetto chiave per gli investitori orientati al reddito. Dalla IPO nel 2015, la società ha incrementato il dividendo ordinario ogni anno (CAGR 2015-2023 ~30%, inclusi effetti straordinari).
-
-Storico Dividendi INWIT (€/azione):
-• 2015: €0,09
-• 2016: €0,15
-• 2017: €0,19
-• 2018: €0,21
-• 2019: €0,13 ordinario + €0,59 straordinario
-• 2020: €0,30
-• 2021: €0,32
-• 2022: €0,35
-• 2023: €0,48
-
-Come si evince, prima del 2019 l'azienda incrementava il dividendo ~€0,02/anno, mantenendo un payout prudente (~80% utili). Nel 2019, in concomitanza con la fusione Vodafone (e l'incasso di un conguaglio in cash), è stato erogato un corposo dividendo straordinario €0,5936 ad azione attingendo a riserve. Dal 2020 in poi, INWIT ha adottato una dividend policy formale: DPS in crescita annua +7,5% per il 2021-2023, rinnovata e aumentata per il 2023-2026.
-
-8. Performance Finanziaria (ultimi 5 anni)
-INWIT ha registrato negli scorsi 5 anni una crescita trasformativa, passando da medie dimensioni pre-fusione (2019) a uno dei leader europei del settore torri post integrazione (2020+).
-
-Tabella 1 – Conto Economico & Cash Flow 2019-2023:
-• 2019: Ricavi €395,4M, EBITDA €349,8M (88,5%), Utile Netto €139,3M, FCF ~€156,7M
-• 2020: Ricavi €663,4M, EBITDA €603,8M (91,0%), Utile Netto €156,7M, FCF €271,8M
-• 2021: Ricavi €785,1M, EBITDA €714,9M (91,1%), Utile Netto €191,4M, FCF €366,5M
-• 2022: Ricavi €853,0M, EBITDA €779,2M (91,3%), Utile Netto €293,3M, FCF €491,4M
-• 2023: Ricavi €960,3M, EBITDA €877,0M (91,3%), Utile Netto €339,0M, FCF €611,0M
-
-Nel 2020 i ricavi ed EBITDA sono quasi raddoppiati per l'ampliamento del perimetro (fusione Vodafone Towers). Dal 2021, consolidato il perimetro, i ricavi hanno accelerato: +4,6% like-for-like nel 2021, poi +8,6% nel 2022 e +10% stimato nel 2023. L'EBITDA ha seguito dinamica simile, con margini leggermente in aumento grazie a sinergie e cost control. L'utile netto ha mostrato un trend anomalo: relativamente piatto 2019-21, poi in forte crescita nel 2022 a €293M (+53%) principalmente per minori imposte.
-
-9. Valutazione
-Multipli di mercato attuali: Alla luce dei risultati 2024 appena pubblicati, il titolo INWIT quota intorno a €10,4/azione (maggio 2025) per una capitalizzazione di mercato ~€9,8 miliardi.
-• Prezzo/Utile (P/E) TTM ~23,5x
-• EV/EBITDA 2024 ~15x
-• Prezzo/Valore Contabile (P/B) ~2,4x
-• Rapporto Debito Netto/EBITDA: ~4,7x (IFRS16) a fine Q1 2025
-
-Valutazione assoluta – DCF: Abbiamo effettuato un'Analisi DCF dettagliata in tre scenari per stimare il fair value intrinseco di INWIT. Il cash flow utilizzato è il FCF agli azionisti (FCFE), data la struttura stabile di indebitamento. Principali assunzioni del Scenario Base: crescita ricavi in linea con il piano fino al 2026 (+8% annuo), poi decelera a +4% 2027-30; margini EBITDAaL in progressivo miglioramento; WACC iniziale 5,5%, destinato a scendere leggermente se riduzione leva; g-rate terminale 1,5%.
-
-Sulla base di queste ipotesi, il fair value DCF base risulta intorno a €11,0 per azione, indicando che al prezzo attuale il titolo è leggermente sottovalutato (upside potenziale ~+6%).
-
-10. Scenario & Sensitivity Analysis
-Abbiamo sviluppato tre scenari di piano a 10 anni (Base, Pessimistico, Ottimistico):
-
-Scenario Base: ricavi 2025-30 +6% CAGR, EBITDAaL margin sale a 76% nel 2026 e 78% nel 2030, WACC 5,5%. Questo scenario produce FCF stabile ~€630-700M annuo 2025-30, con crescita del dividendo +7,5% fino 2026 poi ~+3% annuo. TSR atteso: ~8% annuo.
-
-Scenario Pessimistico: crescita ricavi dimezzata (3% annuo), WACC più elevato al 6,5%, costi più alti. FCF stagnerebbe intorno €550-580M annui. Nel pessimistico, ipotizziamo eventualmente nessun aumento DPS dopo il 2025 per sicurezza.
-
-Scenario Ottimistico: crescita ricavi sopra attese (7-8% annuo), WACC in calo a 5%, payout simile. FCF potrebbe superare €700M a regime. TSR ottimistico: sui 10 anni potrebbe superare il 10-11% annuo.
-
-11. Regolamentazione & Rischi Normativi
-Il mercato torri in Italia, pur concentrato in due operatori, non è strettamente regolato da AGCOM. Un rischio normativo potrebbe sorgere se in futuro INWIT tentasse un'ulteriore concentrazione: ciò probabilmente verrebbe bloccato. L'aspetto cruciale era il limite di esposizione per la popolazione: l'Italia l'ha appena modificato (Aprile 2024) da 6 V/m a 15 V/m – una svolta epocale dopo 20 anni. Per INWIT questo è un coltello a doppio taglio: positivo perché i clienti avranno meno vincoli; negativo perché si riduce il bisogno di installare nuove torri in zone dove l'unico impedimento era il limite.
-
-12. ESG & Sustainability
-INWIT ha integrato la sostenibilità ambientale, sociale e di governance (ESG) nella propria strategia. Ambiente: Come discusso, INWIT è impegnata nella riduzione dell'impatto ambientale delle proprie attività. Target di neutralità climatica al 2024, da perseguire con uso 100% energia rinnovabile, investimenti in efficienza e compensazione delle emissioni residue. Sociale: l'organico è passato da 206 a 246 nel 2021, con 51 nuove assunzioni di cui ~50% donne. Governance: 11 membri CdA, di cui la maggioranza indipendenti. È stato adottato un Modello 231 e Codice Etico.
-
-13. Rischi & Catalyst
-Rischi principali:
-• Rischio di settore (Telecom) – dipendenza dalla salute finanziaria del settore TLC italiano
-• Rischio di esecuzione/tecnologico – obiettivi di crescita e investimenti ambiziosi 
-• Rischio finanziario – Alto indebitamento, se i tassi salissero ulteriormente
-• Rischio regolatorio – eventuali normative restrittive
-• Rischio di governance – controllo congiunto potrebbe creare stallo decisionale
-
-Catalizzatori positivi:
-• Discesa dei tassi d'interesse: sarebbe il catalizzatore più potente
-• Consolidamento tra operatori mobili: può sembrare un rischio ma potrebbe essere un booster
-• Operazioni straordinarie su INWIT stessa: circolano voci di takeover
-• Nuove fonti di ricavo: edge computing, servizi wholesale
-• Miglioramento rating ESG
-
-14. Liquidità & Flottante Azionario
-Il titolo INWIT è ampiamente liquido e fa parte dell'indice FTSE MIB, con circa 932 milioni di azioni in circolazione post-buyback (flottante ~37%). La media dei volumi scambiati è elevata: tipicamente 3-4 milioni di azioni al giorno. La composizione del flottante include primari investitori orientati al rendimento: fondi Value e Dividendo e ETF globali.
-
-15. Total Shareholder Return (TSR) comparato
-TSR 1 anno: Negli ultimi 12 mesi il titolo INWIT ha registrato una performance positiva, grazie soprattutto ai dividendi. Il TSR 1Y risulta ~+10%.
-
-TSR 3 anni: Consideriamo il periodo maggio 2022 – maggio 2025. TSR 3Y ~+14-15% (equivalente a ~4,5-5% annuo composto). Non un risultato entusiasmante, dovuto al fatto che il punto di partenza (2022) era su valutazioni elevate e poi i tassi hanno frenato il titolo. Tuttavia, ha fatto decisamente meglio del settore torri europeo: Cellnex TSR 3Y ≈ –40%.
-
-TSR 5 anni: Dal maggio 2020 a maggio 2025. Il TSR cumulativo stimato ~+26% totale, ossia ~4,7% annuo composto. Se consideriamo l'intero orizzonte (2015 IPO a oggi): chi investì all'IPO ha oggi un valore + div ~€12,9, cioè +253% totali (oltre 3,5x), ~17% annuo composto, un risultato eccellente.
-
-16. Impatto Fiscale sui Dividendi
-Investitori individuali residenti in Italia: I dividendi distribuiti da società italiane quotate sono soggetti ad una imposta sostitutiva fissa del 26%. Dunque la dividend yield netta per un retail domestico su INWIT risulta ~3,4%.
-
-Investitori esteri: I dividendi INWIT distribuiti a soggetti non residenti sono soggetti a ritenuta fiscale italiana del 26% alla fonte, salvo applicazione di trattati contro doppia imposizione. L'Italia ha trattati con molti Paesi che riducono la ritenuta, tipicamente al 15%.
-
-17. Appendice & Metodologia
-Fonti dei dati: La presente relazione ha utilizzato dati ufficiali di bilancio e comunicati societari INWIT (Annual Reports 2019-2023, presentazioni risultati trimestrali). Le stime e scenari presentati (DCF, sensitivities) sono elaborazioni originali basate su assunzioni esplicitate.
-
-Metodologia di valutazione: Per la valutazione abbiamo costruito un modello DCF in Excel partendo da ricavi attuali e seguendo il business plan fino al 2026, poi prolungando con ipotesi prudenti al 2035. Il Terminal Value è calcolato con metodo Gordon Growth.
-
-18. Conclusione & Raccomandazione
-Alla luce dell'analisi condotta, INWIT emerge come un investimento solido e redditizio per un orizzonte decennale orientato al dividendo. La società combina:
-• Dividendi di qualità, in costante crescita e ben coperti dalla generazione di cassa (FCF yield ~6.5% > dividend yield ~4.5%), con impegno formale a incrementare la cedola del 7,5% annuo fino al 2026.
-• Modello di business resiliente, ancorato a contratti di lungo termine indicizzati all'inflazione e a un posizionamento di leadership infrastrutturale in un settore con barriere elevate.
-• Stabilità finanziaria, nonostante la leva alta: struttura del debito ottimizzata e calo progressivo del leverage, margini altissimi (EBITDA >91%) e costi sotto controllo.
-• Prospettive di crescita moderate ma concrete, trainate dalla transizione 5G e dalla domanda di connettività ubiqua.
-
-Pertanto, la raccomandazione finale è di ACCUMULARE/HOLD con bias positivo (equivalente ad un Outperform per investitori income): INWIT rappresenta una valida componente core di portafoglio a reddito, adatta a sostenere un cash yield stabile e crescente nel tempo. Il titolo ha un fair value stimato intorno a €11-12 in scenario normale, con upside nel medio termine in caso di compressione dei rendimenti obbligazionari o ulteriori efficienze oltre piano.
-"""
+    # Carica l'analisi completa
+    analysis_content = load_analysis_text()
     
-    # Parse delle sezioni principali
-    sections = re.split(r'\n(?=Executive Summary|\d+\. )', analysis_content)
-    sections = [s.strip() for s in sections if s.strip()]
+    # Suddividi in sezioni principali usando i titoli numerati come "1. ", "2. " ecc.
+    sections = re.split(r'\n(?=\d+\. )', analysis_content)
     
-    # CSS per styling ottimale
-    st.markdown("""
-    <style>
-    .analysis-section {
-        background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 5px solid #1f77b4;
-        margin: 1rem 0;
-        font-size: 16px;
-        line-height: 1.6;
-    }
-    .section-title {
-        color: #1f77b4;
-        font-size: 1.3rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #e0e0e0;
-        padding-bottom: 0.5rem;
-    }
-    .highlight-section {
-        background-color: #e7f3ff;
-        border-left: 5px solid #2e86ab;
-    }
-    .key-points {
-        background-color: #f0f8ff;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-    }
-    .metric-highlight {
-        background-color: #e8f5e9;
-        padding: 0.5rem;
-        border-radius: 5px;
-        display: inline-block;
-        margin: 0.2rem;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Separa l'Executive Summary
+    if sections and not sections[0].startswith("1."):
+        executive_summary = sections[0]
+        sections = sections[1:]
+    else:
+        executive_summary = ""
     
     # Crea tabs per le sezioni principali
     tab_names = ["Executive Summary & Overview", "Business & Strategy", "Analisi Finanziaria", "Valutazione & Scenari", "Rischi & Opportunità", "Governance & ESG"]
@@ -1108,9 +971,7 @@ Pertanto, la raccomandazione finale è di ACCUMULARE/HOLD con bias positivo (equ
     # Tab 1: Executive Summary & Overview
     with tabs[0]:
         st.markdown('<div class="section-title">Executive Summary</div>', unsafe_allow_html=True)
-        
-        summary_content = sections[0] if sections else ""
-        st.markdown(f'<div class="analysis-section highlight-section">{summary_content}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="analysis-section highlight-section">{executive_summary}</div>', unsafe_allow_html=True)
         
         # Key metrics highlights
         col1, col2, col3 = st.columns(3)
@@ -1145,7 +1006,7 @@ Pertanto, la raccomandazione finale è di ACCUMULARE/HOLD con bias positivo (equ
             <div class="key-points">
             <h4>💰 Finanziari</h4>
             <ul>
-            <li>FCF 2023: <span class="metric-highlight">€611M</span></li>
+            <li>FCF 2023: <span class="metric-highlight">€511M</span></li>
             <li>Net Debt/EBITDA: <span class="metric-highlight">4.1x</span></li>
             <li>TSR Target: <span class="metric-highlight">7-9%</span></li>
             <li>Fair Value: <span class="metric-highlight">€11-12</span></li>
@@ -1153,106 +1014,88 @@ Pertanto, la raccomandazione finale è di ACCUMULARE/HOLD con bias positivo (equ
             </div>
             """, unsafe_allow_html=True)
         
-        # Parsing sezioni 1-2
-        if len(sections) > 1:
-            st.markdown('<div class="section-title">1. Descrizione Aziendale</div>', unsafe_allow_html=True)
-            business_desc = sections[1] if len(sections) > 1 else ""
-            st.markdown(f'<div class="analysis-section">{business_desc}</div>', unsafe_allow_html=True)
+        # Sections 1 & 2
+        if len(sections) > 0:
+            st.markdown(f'<div class="section-title">1. Descrizione Aziendale</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[0]}</div>', unsafe_allow_html=True)
         
-        if len(sections) > 2:
-            st.markdown('<div class="section-title">2. Management & Governance</div>', unsafe_allow_html=True)
-            management_content = sections[2] if len(sections) > 2 else ""
-            st.markdown(f'<div class="analysis-section">{management_content}</div>', unsafe_allow_html=True)
+        if len(sections) > 1:
+            st.markdown(f'<div class="section-title">2. Management & Governance</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[1]}</div>', unsafe_allow_html=True)
     
     # Tab 2: Business & Strategy
     with tabs[1]:
+        if len(sections) > 2:
+            st.markdown(f'<div class="section-title">3. Piano Industriale & Strategia</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[2]}</div>', unsafe_allow_html=True)
+        
         if len(sections) > 3:
-            st.markdown('<div class="section-title">3. Piano Industriale & Strategia</div>', unsafe_allow_html=True)
-            strategy_content = sections[3] if len(sections) > 3 else ""
-            st.markdown(f'<div class="analysis-section">{strategy_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">4. Outlook Macroeconomico & Tassi</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[3]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 4:
-            st.markdown('<div class="section-title">4. Outlook Macroeconomico & Tassi</div>', unsafe_allow_html=True)
-            macro_content = sections[4] if len(sections) > 4 else ""
-            st.markdown(f'<div class="analysis-section">{macro_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">5. Analisi PESTEL</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[4]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 5:
-            st.markdown('<div class="section-title">5. Analisi PESTEL</div>', unsafe_allow_html=True)
-            pestel_content = sections[5] if len(sections) > 5 else ""
-            st.markdown(f'<div class="analysis-section">{pestel_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 6:
-            st.markdown('<div class="section-title">6. Analisi delle 5 Forze di Porter</div>', unsafe_allow_html=True)
-            porter_content = sections[6] if len(sections) > 6 else ""
-            st.markdown(f'<div class="analysis-section">{porter_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">6. Analisi delle 5 Forze di Porter</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[5]}</div>', unsafe_allow_html=True)
     
     # Tab 3: Analisi Finanziaria
     with tabs[2]:
+        if len(sections) > 6:
+            st.markdown(f'<div class="section-title">7. Andamento Storico dei Dividendi</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[6]}</div>', unsafe_allow_html=True)
+        
         if len(sections) > 7:
-            st.markdown('<div class="section-title">7. Andamento Storico dei Dividendi</div>', unsafe_allow_html=True)
-            dividends_content = sections[7] if len(sections) > 7 else ""
-            st.markdown(f'<div class="analysis-section">{dividends_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">8. Performance Finanziaria (ultimi 5 anni)</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[7]}</div>', unsafe_allow_html=True)
         
-        if len(sections) > 8:
-            st.markdown('<div class="section-title">8. Performance Finanziaria (ultimi 5 anni)</div>', unsafe_allow_html=True)
-            performance_content = sections[8] if len(sections) > 8 else ""
-            st.markdown(f'<div class="analysis-section">{performance_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 15:
-            st.markdown('<div class="section-title">15. Total Shareholder Return (TSR) comparato</div>', unsafe_allow_html=True)
-            tsr_content = sections[15] if len(sections) > 15 else ""
-            st.markdown(f'<div class="analysis-section">{tsr_content}</div>', unsafe_allow_html=True)
+        if len(sections) > 14:
+            st.markdown(f'<div class="section-title">15. Total Shareholder Return (TSR) comparato</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[14]}</div>', unsafe_allow_html=True)
     
     # Tab 4: Valutazione & Scenari
     with tabs[3]:
+        if len(sections) > 8:
+            st.markdown(f'<div class="section-title">9. Valutazione</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[8]}</div>', unsafe_allow_html=True)
+        
         if len(sections) > 9:
-            st.markdown('<div class="section-title">9. Valutazione</div>', unsafe_allow_html=True)
-            valuation_content = sections[9] if len(sections) > 9 else ""
-            st.markdown(f'<div class="analysis-section">{valuation_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">10. Scenario & Sensitivity Analysis</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[9]}</div>', unsafe_allow_html=True)
         
-        if len(sections) > 10:
-            st.markdown('<div class="section-title">10. Scenario & Sensitivity Analysis</div>', unsafe_allow_html=True)
-            scenarios_content = sections[10] if len(sections) > 10 else ""
-            st.markdown(f'<div class="analysis-section">{scenarios_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 16:
-            st.markdown('<div class="section-title">16. Impatto Fiscale sui Dividendi</div>', unsafe_allow_html=True)
-            tax_content = sections[16] if len(sections) > 16 else ""
-            st.markdown(f'<div class="analysis-section">{tax_content}</div>', unsafe_allow_html=True)
+        if len(sections) > 15:
+            st.markdown(f'<div class="section-title">16. Impatto Fiscale sui Dividendi</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[15]}</div>', unsafe_allow_html=True)
     
     # Tab 5: Rischi & Opportunità
     with tabs[4]:
+        if len(sections) > 12:
+            st.markdown(f'<div class="section-title">13. Rischi & Catalyst</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[12]}</div>', unsafe_allow_html=True)
+        
+        if len(sections) > 10:
+            st.markdown(f'<div class="section-title">11. Regolamentazione & Rischi Normativi</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[10]}</div>', unsafe_allow_html=True)
+        
         if len(sections) > 13:
-            st.markdown('<div class="section-title">13. Rischi & Catalyst</div>', unsafe_allow_html=True)
-            risks_content = sections[13] if len(sections) > 13 else ""
-            st.markdown(f'<div class="analysis-section">{risks_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 11:
-            st.markdown('<div class="section-title">11. Regolamentazione & Rischi Normativi</div>', unsafe_allow_html=True)
-            regulation_content = sections[11] if len(sections) > 11 else ""
-            st.markdown(f'<div class="analysis-section">{regulation_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 14:
-            st.markdown('<div class="section-title">14. Liquidità & Flottante Azionario</div>', unsafe_allow_html=True)
-            liquidity_content = sections[14] if len(sections) > 14 else ""
-            st.markdown(f'<div class="analysis-section">{liquidity_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">14. Liquidità & Flottante Azionario</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[13]}</div>', unsafe_allow_html=True)
     
     # Tab 6: Governance & ESG
     with tabs[5]:
-        if len(sections) > 12:
-            st.markdown('<div class="section-title">12. ESG & Sustainability</div>', unsafe_allow_html=True)
-            esg_content = sections[12] if len(sections) > 12 else ""
-            st.markdown(f'<div class="analysis-section">{esg_content}</div>', unsafe_allow_html=True)
+        if len(sections) > 11:
+            st.markdown(f'<div class="section-title">12. ESG & Sustainability</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[11]}</div>', unsafe_allow_html=True)
+        
+        if len(sections) > 16:
+            st.markdown(f'<div class="section-title">17. Appendice & Metodologia</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section">{sections[16]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 17:
-            st.markdown('<div class="section-title">17. Appendice & Metodologia</div>', unsafe_allow_html=True)
-            methodology_content = sections[17] if len(sections) > 17 else ""
-            st.markdown(f'<div class="analysis-section">{methodology_content}</div>', unsafe_allow_html=True)
-        
-        if len(sections) > 18:
-            st.markdown('<div class="section-title">18. Conclusione & Raccomandazione</div>', unsafe_allow_html=True)
-            conclusion_content = sections[18] if len(sections) > 18 else ""
-            st.markdown(f'<div class="analysis-section highlight-section">{conclusion_content}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">18. Conclusione & Raccomandazione</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="analysis-section highlight-section">{sections[17]}</div>', unsafe_allow_html=True)
     
     # Summary card finale
     st.markdown("---")
