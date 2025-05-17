@@ -443,7 +443,7 @@ elif section_id == "performance":
             name='Ricavi',
             marker_color='lightblue',
             text=df_fin_clean['Ricavi (€M)'],
-            texttemplate='%{text}M',
+            texttemplate='%{text:.1f}M',
             textposition='outside'
         ))
         
@@ -509,36 +509,77 @@ elif section_id == "performance":
         
         st.plotly_chart(fig_margin, use_container_width=True)
     
-    # Tabella performance finanziaria
+    # Tabella performance finanziaria - CORRETTO
     st.subheader("📊 Dettaglio Performance Finanziaria")
     
     # Preparazione tabella con codice colore
     df_display = df_fin_clean.copy()
     df_display['Ricavi (€M)'] = df_display['Ricavi (€M)'].round(1)
     df_display['EBITDA (€M)'] = df_display['EBITDA (€M)'].round(1)
+    df_display['EBITDA Margin (%)'] = df_display['EBITDA Margin (%)'].round(1)
+    df_display['Utile Netto (€M)'] = df_display['Utile Netto (€M)'].round(1)
     df_display['FCF (€M)'] = df_display['FCF (€M)'].round(1)
+    df_display['EPS (€)'] = df_display['EPS (€)'].round(2)
+    df_display['DPS (€)'] = df_display['DPS (€)'].round(3)
     
     st.dataframe(
         df_display.set_index('Anno'),
         use_container_width=True,
+        hide_index=False,
         column_config={
             "Ricavi (€M)": st.column_config.NumberColumn(
                 "Ricavi (€M)",
                 help="Ricavi totali annui",
-                format="%d"
+                format="%.1f"
+            ),
+            "EBITDA (€M)": st.column_config.NumberColumn(
+                "EBITDA (€M)",
+                help="EBITDA annuale",
+                format="%.1f"
             ),
             "EBITDA Margin (%)": st.column_config.NumberColumn(
                 "EBITDA Margin (%)",
                 help="Margine EBITDA",
                 format="%.1f%%"
             ),
+            "Utile Netto (€M)": st.column_config.NumberColumn(
+                "Utile Netto (€M)",
+                help="Utile netto annuale",
+                format="%.1f"
+            ),
+            "EPS (€)": st.column_config.NumberColumn(
+                "EPS (€)",
+                help="Utile per azione",
+                format="%.2f"
+            ),
+            "FCF (€M)": st.column_config.NumberColumn(
+                "FCF (€M)",
+                help="Free Cash Flow",
+                format="%.1f"
+            ),
             "DPS (€)": st.column_config.NumberColumn(
                 "DPS (€)",
                 help="Dividendo per azione",
                 format="%.3f"
+            ),
+            "Fase": st.column_config.TextColumn(
+                "Fase",
+                help="Fase dell'azienda"
             )
         }
     )
+    
+    # Footer standard con disclaimer
+    st.markdown("---")
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+    <strong>DISCLAIMER</strong><br>
+    Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+    Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+    Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+    <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- Sezione: Business Model Torri ---
 elif section_id == "business_model":
@@ -693,7 +734,7 @@ elif section_id == "fcf_analysis":
         
         st.plotly_chart(fig_payout, use_container_width=True)
     
-    # Stress test dividendi
+    # Stress test dividendi - CORRETTO
     st.subheader("🧪 Stress Test: Sostenibilità Dividendo")
     
     scenarios = {
@@ -705,7 +746,38 @@ elif section_id == "fcf_analysis":
     }
     
     df_stress = pd.DataFrame(scenarios)
-    st.dataframe(df_stress, use_container_width=True)
+    
+    # Formatta correttamente lo stress test
+    st.dataframe(
+        df_stress,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Scenario": st.column_config.TextColumn(
+                "Scenario",
+                help="Scenario di stress test"
+            ),
+            "FCF 2024 (€M)": st.column_config.NumberColumn(
+                "FCF 2024 (€M)",
+                help="Free Cash Flow stimato",
+                format="%.1f"
+            ),
+            "Dividendi Totali (€M)": st.column_config.NumberColumn(
+                "Dividendi Totali (€M)",
+                help="Totale dividendi distribuiti",
+                format="%.1f"
+            ),
+            "Copertura": st.column_config.NumberColumn(
+                "Copertura",
+                help="Rapporto FCF/Dividendi",
+                format="%.2f"
+            ),
+            "Sostenibilità": st.column_config.TextColumn(
+                "Sostenibilità",
+                help="Valutazione della sostenibilità del dividendo"
+            )
+        }
+    )
     
     st.info("""
     **💡 Analisi Stress Test:**
@@ -756,7 +828,7 @@ elif section_id == "projections":
     
     st.plotly_chart(fig_proj, use_container_width=True)
     
-    # Proiezioni finanziarie
+    # Proiezioni finanziarie - CORRETTO
     st.subheader("📊 Proiezioni Finanziarie (Piano Industriale)")
     
     # Dati proiezioni (dal piano industriale)
@@ -776,7 +848,30 @@ elif section_id == "projections":
         'CAGR 24-26': ['8.1%', '8.7%', '+109bps', '22.0%', 'Miglioramento', '7.5%', 'Stabile']
     })
     
-    st.dataframe(df_projections.set_index('Metrica'), use_container_width=True)
+    # Formattazione corretta delle proiezioni finanziarie
+    st.dataframe(
+        df_projections.set_index('Metrica'),
+        use_container_width=True,
+        hide_index=False,
+        column_config={
+            "2024E": st.column_config.Column(
+                "2024E",
+                help="Stima 2024"
+            ),
+            "2025E": st.column_config.Column(
+                "2025E",
+                help="Stima 2025"
+            ),
+            "2026E": st.column_config.Column(
+                "2026E",
+                help="Stima 2026"
+            ),
+            "CAGR 24-26": st.column_config.Column(
+                "CAGR 24-26",
+                help="Crescita annua composta 2024-2026"
+            )
+        }
+    )
     
     # Key drivers crescita
     st.markdown("""
@@ -853,18 +948,48 @@ elif section_id == "debt_analysis":
         
         st.plotly_chart(fig_coverage, use_container_width=True)
     
-    # Struttura del debito
+    # Struttura del debito - CORRETTO
     st.subheader("💳 Struttura del Debito")
     
     debt_structure = {
         'Strumento': ['Bond 2026', 'Bond 2028', 'Term Loan', 'Leasing IFRS16'],
-        'Import (€M)': [750, 1000, 1000, 1000],
+        'Importo (€M)': [750, 1000, 1000, 1000],
         'Tasso (%)': [1.875, 2.375, 'EURIBOR + 150bps', 'N/A'],
         'Scadenza': ['2026', '2028', '2025', 'Varie'],
         'Note': ['Fisso', 'Fisso', 'Variabile', 'Affitti capitalizzati']
     }
     
-    st.dataframe(pd.DataFrame(debt_structure), use_container_width=True)
+    df_debt_structure = pd.DataFrame(debt_structure)
+    
+    # Formattazione corretta della struttura del debito
+    st.dataframe(
+        df_debt_structure,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Strumento": st.column_config.TextColumn(
+                "Strumento",
+                help="Tipologia di strumento di debito"
+            ),
+            "Importo (€M)": st.column_config.NumberColumn(
+                "Importo (€M)",
+                help="Importo in milioni di euro",
+                format="%.0f"
+            ),
+            "Tasso (%)": st.column_config.Column(
+                "Tasso (%)",
+                help="Tasso di interesse applicato"
+            ),
+            "Scadenza": st.column_config.TextColumn(
+                "Scadenza",
+                help="Anno di scadenza"
+            ),
+            "Note": st.column_config.TextColumn(
+                "Note",
+                help="Informazioni aggiuntive"
+            )
+        }
+    )
     
     st.info("""
     **📊 Analisi Struttura Debito:**
@@ -895,7 +1020,7 @@ elif section_id == "peer_comparison":
     
     st.plotly_chart(fig_yield_comp, use_container_width=True)
     
-    # Tabella confronto multipli
+    # Tabella confronto multipli - CORRETTO
     st.subheader("📈 Confronto Multipli di Valutazione")
     
     multiples_comparison = {
@@ -909,14 +1034,23 @@ elif section_id == "peer_comparison":
     
     df_multiples = pd.DataFrame(multiples_comparison)
     
+    # Formattazione corretta dei multipli
     st.dataframe(
         df_multiples,
         use_container_width=True,
+        hide_index=True,
         column_config={
-            "EV/EBITDA 2024E": st.column_config.NumberColumn(
+            "Società": st.column_config.TextColumn(
+                "Società",
+                help="Nome dell'azienda"
+            ),
+            "EV/EBITDA 2024E": st.column_config.Column(
                 "EV/EBITDA 2024E",
-                help="Enterprise Value / EBITDA",
-                format="%.1fx"
+                help="Enterprise Value / EBITDA"
+            ),
+            "P/E 2024E": st.column_config.Column(
+                "P/E 2024E",
+                help="Price / Earnings"
             ),
             "Dividend Yield (%)": st.column_config.NumberColumn(
                 "Dividend Yield (%)",
@@ -926,7 +1060,11 @@ elif section_id == "peer_comparison":
             "Net Debt/EBITDA": st.column_config.NumberColumn(
                 "Net Debt/EBITDA",
                 help="Leva finanziaria",
-                format="%.1fx"
+                format="%.1f"
+            ),
+            "Geografie": st.column_config.TextColumn(
+                "Geografie",
+                help="Mercati geografici principali"
             )
         }
     )
