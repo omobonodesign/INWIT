@@ -197,6 +197,18 @@ df_debt_analysis = pd.DataFrame({
 # --- Titolo e Header ---
 st.title(f"📡 Analisi Dividendi: {NOME_SOCIETA} ({TICKER})")
 st.caption(f"Analisi aggiornata al: {datetime.now().strftime('%d/%m/%Y')}. Dati finanziari storici dal 2015, proiezioni fino al 2026 basate sul Piano Industriale.")
+
+# Disclaimer in alto
+st.markdown("""
+<div style="background-color: #f8f9fa; padding: 0.7rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.8rem;">
+<strong>DISCLAIMER</strong><br>
+Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+<em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("---")
 
 # --- Layout CSS Personalizzato ---
@@ -399,6 +411,18 @@ if section_id == "dividends":
     <li><strong>Policy Chiara</strong>: +7.5% annuo confermato fino al 2026 (DPS atteso €0.555 nel 2025)</li>
     <li><strong>Sostenibilità</strong>: Il payout è coperto dall'80% del FCF, lasciando margine per crescita e deleveraging</li>
     </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Footer standard con disclaimer
+    st.markdown("---")
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+    <strong>DISCLAIMER</strong><br>
+    Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+    Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+    Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+    <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1022,6 +1046,18 @@ elif section_id == "full_analysis":
         if len(sections) > 1:
             st.markdown(f'<div class="section-title">2. Management & Governance</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section">{sections[1]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Tab 2: Business & Strategy
     with tabs[1]:
@@ -1040,6 +1076,18 @@ elif section_id == "full_analysis":
         if len(sections) > 5:
             st.markdown(f'<div class="section-title">6. Analisi delle 5 Forze di Porter</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section">{sections[5]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Tab 3: Analisi Finanziaria
     with tabs[2]:
@@ -1054,6 +1102,18 @@ elif section_id == "full_analysis":
         if len(sections) > 14:
             st.markdown(f'<div class="section-title">15. Total Shareholder Return (TSR) comparato</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section">{sections[14]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Tab 4: Valutazione & Scenari
     with tabs[3]:
@@ -1068,6 +1128,18 @@ elif section_id == "full_analysis":
         if len(sections) > 15:
             st.markdown(f'<div class="section-title">16. Impatto Fiscale sui Dividendi</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section">{sections[15]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Tab 5: Rischi & Opportunità
     with tabs[4]:
@@ -1082,6 +1154,18 @@ elif section_id == "full_analysis":
         if len(sections) > 13:
             st.markdown(f'<div class="section-title">14. Liquidità & Flottante Azionario</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section">{sections[13]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Tab 6: Governance & ESG
     with tabs[5]:
@@ -1094,8 +1178,20 @@ elif section_id == "full_analysis":
             st.markdown(f'<div class="analysis-section">{sections[16]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 17:
-            st.markdown(f'<div class="section-title">18. Conclusione & Raccomandazione</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">18. Conclusione & Valutazione Finale</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="analysis-section highlight-section">{sections[17]}</div>', unsafe_allow_html=True)
+        
+        # Footer standard con disclaimer
+        st.markdown("---")
+        st.markdown("""
+        <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+        <strong>DISCLAIMER</strong><br>
+        Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+        Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+        Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+        <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Summary card finale
     st.markdown("---")
@@ -1104,11 +1200,11 @@ elif section_id == "full_analysis":
         <h2>🎯 Sintesi Finale</h2>
         <div style="display: flex; justify-content: space-around; margin-top: 1rem;">
             <div>
-                <h3>📊 Rating</h3>
-                <p style="font-size: 2rem; font-weight: bold;">BUY</p>
+                <h3>📊 Valutazione</h3>
+                <p style="font-size: 2rem; font-weight: bold;">Favorevole</p>
             </div>
             <div>
-                <h3>💰 Target Price</h3>
+                <h3>💰 Fair Value Range</h3>
                 <p style="font-size: 2rem; font-weight: bold;">€11-12</p>
             </div>
             <div>
@@ -1116,13 +1212,25 @@ elif section_id == "full_analysis":
                 <p style="font-size: 2rem; font-weight: bold;">7-9%</p>
             </div>
         </div>
-        <p style="margin-top: 1rem; font-style: italic;">Investimento ideale per portafogli orientati al reddito con orizzonte di lungo termine</p>
+        <p style="margin-top: 1rem; font-style: italic;">Profilo coerente con portafogli orientati al reddito con orizzonte di lungo termine</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Footer standard con disclaimer
+    st.markdown("---")
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+    <strong>DISCLAIMER</strong><br>
+    Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+    Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+    Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+    <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
     </div>
     """, unsafe_allow_html=True)
 
 # --- Sezione: Conclusioni ---
 elif section_id == "conclusions":
-    st.subheader("🎯 Conclusioni e Raccomandazioni")
+    st.subheader("🎯 Conclusioni e Considerazioni")
     
     # Summary metrics
     col1, col2, col3 = st.columns(3)
@@ -1136,12 +1244,12 @@ elif section_id == "conclusions":
     with col3:
         st.metric("Fair Value stimato", "€11-12", help="Target price basato su DCF e multipli")
     
-    # Raccomandazione finale
+    # Considerazioni sull'investimento
     st.markdown("""
     <div class="highlight-box">
-    <h2>📊 Raccomandazione: BUY/ACCUMULO</h2>
+    <h2>📊 Elementi di Analisi</h2>
     
-    <h3>✅ Tesi di Investimento - Punti di Forza:</h3>
+    <h3>✅ Punti di Interesse per l'Investimento:</h3>
     <ul>
     <li><strong>Dividend Growth Story</strong>: Rendimento attuale 4.6% con crescita programmata 7.5% annuo</li>
     <li><strong>Business Monopolistico</strong>: Leader indiscusso in Italia, asset essenziali per 4G/5G</li>
@@ -1158,7 +1266,7 @@ elif section_id == "conclusions":
     <li><strong>Tassi di Interesse</strong>: Rifinanziamenti 2025-2026 a tassi più alti</li>
     </ul>
     
-    <h3>🎯 Profilo Investitore Ideale:</h3>
+    <h3>🎯 Profilo Investitore Potenzialmente Interessato:</h3>
     <p><strong>Investitori orientati al reddito</strong> con orizzonte >5 anni che cercano:</p>
     <ul>
     <li>Yield elevato e crescente (~4.6% attuale, target ~5-6% entro 2026)</li>
@@ -1167,11 +1275,11 @@ elif section_id == "conclusions":
     <li>Potenziale capital appreciation moderato</li>
     </ul>
     
-    <h3>💰 Target Price e Timing:</h3>
+    <h3>💰 Elementi di Valutazione:</h3>
     <ul>
     <li><strong>Fair Value</strong>: €11-12 (upside ~15% da €10.4 attuali)</li>
-    <li><strong>Entry Point</strong>: Attuale o su debolezze <€10</li>
-    <li><strong>Target Yield on Cost</strong>: >5% acquistando sotto €10</li>
+    <li><strong>Livelli di Interesse</strong>: Attuali o <€10</li>
+    <li><strong>Yield on Cost potenziale</strong>: >5% acquisendo sotto €10</li>
     </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -1205,22 +1313,14 @@ elif section_id == "conclusions":
     
     st.plotly_chart(fig_risk_return, use_container_width=True)
     
-    # Disclaimer finale
+    # Footer standard con disclaimer
     st.markdown("---")
-    st.caption("""
-    **Disclaimer**: Questa analisi è solo a scopo informativo e non costituisce consulenza finanziaria. 
-    I rendimenti passati non garantiscono risultati futuri. Gli investitori dovrebbero condurre le proprie 
-    ricerche e consultare un consulente finanziario qualificato prima di prendere decisioni di investimento.
-    
-    **Fonte dati**: TIKR, Analisi_INWIT.md, comunicati societari, elaborazioni proprie.
-    """)
-    
-    # Footer con firma
     st.markdown("""
-    <div style="text-align: center; margin-top: 2rem; padding: 1rem; border-top: 1px solid #ddd;">
-        <p style="font-style: italic; color: #666;">
-            📡 Analisi generata per investitori orientati al dividendo<br>
-            <small>Created with Streamlit & Plotly</small>
-        </p>
+    <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">
+    <strong>DISCLAIMER</strong><br>
+    Le informazioni contenute in questa presentazione sono fornite esclusivamente a scopo informativo generale e/o educativo. Non costituiscono e non devono essere interpretate come consulenza finanziaria, legale, fiscale o di investimento.<br>
+    Investire nei mercati finanziari comporta rischi significativi, inclusa la possibilità di perdere l'intero capitale investito. Le performance passate non sono indicative né garanzia di risultati futuri.<br>
+    Si raccomanda vivamente di condurre la propria analisi approfondita (due diligence) e di consultare un consulente finanziario indipendente e qualificato prima di prendere qualsiasi decisione di investimento.<br><br>
+    <em>Realizzazione a cura della Barba Sparlante con l'utilizzo di tecnologie di intelligenza artificiale</em>
     </div>
     """, unsafe_allow_html=True)
