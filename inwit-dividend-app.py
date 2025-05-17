@@ -509,65 +509,64 @@ elif section_id == "performance":
         
         st.plotly_chart(fig_margin, use_container_width=True)
     
-    # Tabella performance finanziaria - CORRETTO
-    st.subheader("📊 Dettaglio Performance Finanziaria")
-    
-    # Preparazione tabella con codice colore
-    df_display = df_fin_clean.copy()
-    df_display['Ricavi (€M)'] = df_display['Ricavi (€M)'].round(1)
-    df_display['EBITDA (€M)'] = df_display['EBITDA (€M)'].round(1)
-    df_display['EBITDA Margin (%)'] = df_display['EBITDA Margin (%)'].round(1)
-    df_display['Utile Netto (€M)'] = df_display['Utile Netto (€M)'].round(1)
-    df_display['FCF (€M)'] = df_display['FCF (€M)'].round(1)
-    df_display['EPS (€)'] = df_display['EPS (€)'].round(2)
-    df_display['DPS (€)'] = df_display['DPS (€)'].round(3)
-    
-    st.dataframe(
-        df_display.set_index('Anno'),
-        use_container_width=True,
-        hide_index=False,
-        column_config={
-            "Ricavi (€M)": st.column_config.NumberColumn(
-                "Ricavi (€M)",
-                help="Ricavi totali annui",
-                format="%.1f"
-            ),
-            "EBITDA (€M)": st.column_config.NumberColumn(
-                "EBITDA (€M)",
-                help="EBITDA annuale",
-                format="%.1f"
-            ),
-            "EBITDA Margin (%)": st.column_config.NumberColumn(
-                "EBITDA Margin (%)",
-                help="Margine EBITDA",
-                format="%.1f%%"
-            ),
-            "Utile Netto (€M)": st.column_config.NumberColumn(
-                "Utile Netto (€M)",
-                help="Utile netto annuale",
-                format="%.1f"
-            ),
-            "EPS (€)": st.column_config.NumberColumn(
-                "EPS (€)",
-                help="Utile per azione",
-                format="%.2f"
-            ),
-            "FCF (€M)": st.column_config.NumberColumn(
-                "FCF (€M)",
-                help="Free Cash Flow",
-                format="%.1f"
-            ),
-            "DPS (€)": st.column_config.NumberColumn(
-                "DPS (€)",
-                help="Dividendo per azione",
-                format="%.3f"
-            ),
-            "Fase": st.column_config.TextColumn(
-                "Fase",
-                help="Fase dell'azienda"
-            )
-        }
-    )
+    # Tabella performance finanziaria - CORRETTO CON EXPANDER
+    with st.expander("📊 Dettaglio Performance Finanziaria", expanded=True):
+        # Preparazione tabella con codice colore
+        df_display = df_fin_clean.copy()
+        df_display['Ricavi (€M)'] = df_display['Ricavi (€M)'].round(1)
+        df_display['EBITDA (€M)'] = df_display['EBITDA (€M)'].round(1)
+        df_display['EBITDA Margin (%)'] = df_display['EBITDA Margin (%)'].round(1)
+        df_display['Utile Netto (€M)'] = df_display['Utile Netto (€M)'].round(1)
+        df_display['FCF (€M)'] = df_display['FCF (€M)'].round(1)
+        df_display['EPS (€)'] = df_display['EPS (€)'].round(2)
+        df_display['DPS (€)'] = df_display['DPS (€)'].round(3)
+        
+        st.dataframe(
+            df_display.set_index('Anno'),
+            use_container_width=True,
+            hide_index=False,
+            column_config={
+                "Ricavi (€M)": st.column_config.NumberColumn(
+                    "Ricavi (€M)",
+                    help="Ricavi totali annui",
+                    format="%.1f"
+                ),
+                "EBITDA (€M)": st.column_config.NumberColumn(
+                    "EBITDA (€M)",
+                    help="EBITDA annuale",
+                    format="%.1f"
+                ),
+                "EBITDA Margin (%)": st.column_config.NumberColumn(
+                    "EBITDA Margin (%)",
+                    help="Margine EBITDA",
+                    format="%.1f%%"
+                ),
+                "Utile Netto (€M)": st.column_config.NumberColumn(
+                    "Utile Netto (€M)",
+                    help="Utile netto annuale",
+                    format="%.1f"
+                ),
+                "EPS (€)": st.column_config.NumberColumn(
+                    "EPS (€)",
+                    help="Utile per azione",
+                    format="%.2f"
+                ),
+                "FCF (€M)": st.column_config.NumberColumn(
+                    "FCF (€M)",
+                    help="Free Cash Flow",
+                    format="%.1f"
+                ),
+                "DPS (€)": st.column_config.NumberColumn(
+                    "DPS (€)",
+                    help="Dividendo per azione",
+                    format="%.3f"
+                ),
+                "Fase": st.column_config.TextColumn(
+                    "Fase",
+                    help="Fase dell'azienda"
+                )
+            }
+        )
     
     # Footer standard con disclaimer
     st.markdown("---")
@@ -734,50 +733,49 @@ elif section_id == "fcf_analysis":
         
         st.plotly_chart(fig_payout, use_container_width=True)
     
-    # Stress test dividendi - CORRETTO
-    st.subheader("🧪 Stress Test: Sostenibilità Dividendo")
-    
-    scenarios = {
-        'Scenario': ['Base Case', 'FCF -10%', 'FCF -20%', 'FCF -30%'],
-        'FCF 2024 (€M)': [469, 422, 375, 328],
-        'Dividendi Totali (€M)': [450, 450, 450, 450],
-        'Copertura': [1.04, 0.94, 0.83, 0.73],
-        'Sostenibilità': ['✅ Sostenibile', '⚠️ Limite', '❌ Non Sostenibile', '❌ Non Sostenibile']
-    }
-    
-    df_stress = pd.DataFrame(scenarios)
-    
-    # Formatta correttamente lo stress test
-    st.dataframe(
-        df_stress,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Scenario": st.column_config.TextColumn(
-                "Scenario",
-                help="Scenario di stress test"
-            ),
-            "FCF 2024 (€M)": st.column_config.NumberColumn(
-                "FCF 2024 (€M)",
-                help="Free Cash Flow stimato",
-                format="%.1f"
-            ),
-            "Dividendi Totali (€M)": st.column_config.NumberColumn(
-                "Dividendi Totali (€M)",
-                help="Totale dividendi distribuiti",
-                format="%.1f"
-            ),
-            "Copertura": st.column_config.NumberColumn(
-                "Copertura",
-                help="Rapporto FCF/Dividendi",
-                format="%.2f"
-            ),
-            "Sostenibilità": st.column_config.TextColumn(
-                "Sostenibilità",
-                help="Valutazione della sostenibilità del dividendo"
-            )
+    # Stress test dividendi - CORRETTO CON EXPANDER
+    with st.expander("🧪 Stress Test: Sostenibilità Dividendo", expanded=True):
+        scenarios = {
+            'Scenario': ['Base Case', 'FCF -10%', 'FCF -20%', 'FCF -30%'],
+            'FCF 2024 (€M)': [469, 422, 375, 328],
+            'Dividendi Totali (€M)': [450, 450, 450, 450],
+            'Copertura': [1.04, 0.94, 0.83, 0.73],
+            'Sostenibilità': ['✅ Sostenibile', '⚠️ Limite', '❌ Non Sostenibile', '❌ Non Sostenibile']
         }
-    )
+        
+        df_stress = pd.DataFrame(scenarios)
+        
+        # Formatta correttamente lo stress test
+        st.dataframe(
+            df_stress,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Scenario": st.column_config.TextColumn(
+                    "Scenario",
+                    help="Scenario di stress test"
+                ),
+                "FCF 2024 (€M)": st.column_config.NumberColumn(
+                    "FCF 2024 (€M)",
+                    help="Free Cash Flow stimato",
+                    format="%.1f"
+                ),
+                "Dividendi Totali (€M)": st.column_config.NumberColumn(
+                    "Dividendi Totali (€M)",
+                    help="Totale dividendi distribuiti",
+                    format="%.1f"
+                ),
+                "Copertura": st.column_config.NumberColumn(
+                    "Copertura",
+                    help="Rapporto FCF/Dividendi",
+                    format="%.2f"
+                ),
+                "Sostenibilità": st.column_config.TextColumn(
+                    "Sostenibilità",
+                    help="Valutazione della sostenibilità del dividendo"
+                )
+            }
+        )
     
     st.info("""
     **💡 Analisi Stress Test:**
@@ -828,50 +826,49 @@ elif section_id == "projections":
     
     st.plotly_chart(fig_proj, use_container_width=True)
     
-    # Proiezioni finanziarie - CORRETTO
-    st.subheader("📊 Proiezioni Finanziarie (Piano Industriale)")
-    
-    # Dati proiezioni (dal piano industriale)
-    df_projections = pd.DataFrame({
-        'Metrica': [
-            'Ricavi (€M)',
-            'EBITDA (€M)', 
-            'EBITDA Margin (%)',
-            'Free Cash Flow (€M)',
-            'Net Debt/EBITDA',
-            'DPS (€)',
-            'Dividend Yield (%)'
-        ],
-        '2024E': [1036, 930, 89.8, 469, 3.8, 0.48, 4.6],
-        '2025E': [1120, 1010, 90.2, 630, 3.5, 0.516, 4.8],
-        '2026E': [1210, 1100, 90.9, 700, 3.2, 0.555, 5.0],
-        'CAGR 24-26': ['8.1%', '8.7%', '+109bps', '22.0%', 'Miglioramento', '7.5%', 'Stabile']
-    })
-    
-    # Formattazione corretta delle proiezioni finanziarie
-    st.dataframe(
-        df_projections.set_index('Metrica'),
-        use_container_width=True,
-        hide_index=False,
-        column_config={
-            "2024E": st.column_config.Column(
-                "2024E",
-                help="Stima 2024"
-            ),
-            "2025E": st.column_config.Column(
-                "2025E",
-                help="Stima 2025"
-            ),
-            "2026E": st.column_config.Column(
-                "2026E",
-                help="Stima 2026"
-            ),
-            "CAGR 24-26": st.column_config.Column(
-                "CAGR 24-26",
-                help="Crescita annua composta 2024-2026"
-            )
-        }
-    )
+    # Proiezioni finanziarie - CORRETTO CON EXPANDER
+    with st.expander("📊 Proiezioni Finanziarie (Piano Industriale)", expanded=True):
+        # Dati proiezioni (dal piano industriale)
+        df_projections = pd.DataFrame({
+            'Metrica': [
+                'Ricavi (€M)',
+                'EBITDA (€M)', 
+                'EBITDA Margin (%)',
+                'Free Cash Flow (€M)',
+                'Net Debt/EBITDA',
+                'DPS (€)',
+                'Dividend Yield (%)'
+            ],
+            '2024E': [1036, 930, 89.8, 469, 3.8, 0.48, 4.6],
+            '2025E': [1120, 1010, 90.2, 630, 3.5, 0.516, 4.8],
+            '2026E': [1210, 1100, 90.9, 700, 3.2, 0.555, 5.0],
+            'CAGR 24-26': ['8.1%', '8.7%', '+109bps', '22.0%', 'Miglioramento', '7.5%', 'Stabile']
+        })
+        
+        # Formattazione corretta delle proiezioni finanziarie
+        st.dataframe(
+            df_projections.set_index('Metrica'),
+            use_container_width=True,
+            hide_index=False,
+            column_config={
+                "2024E": st.column_config.Column(
+                    "2024E",
+                    help="Stima 2024"
+                ),
+                "2025E": st.column_config.Column(
+                    "2025E",
+                    help="Stima 2025"
+                ),
+                "2026E": st.column_config.Column(
+                    "2026E",
+                    help="Stima 2026"
+                ),
+                "CAGR 24-26": st.column_config.Column(
+                    "CAGR 24-26",
+                    help="Crescita annua composta 2024-2026"
+                )
+            }
+        )
     
     # Key drivers crescita
     st.markdown("""
@@ -948,48 +945,47 @@ elif section_id == "debt_analysis":
         
         st.plotly_chart(fig_coverage, use_container_width=True)
     
-    # Struttura del debito - CORRETTO
-    st.subheader("💳 Struttura del Debito")
-    
-    debt_structure = {
-        'Strumento': ['Bond 2026', 'Bond 2028', 'Term Loan', 'Leasing IFRS16'],
-        'Importo (€M)': [750, 1000, 1000, 1000],
-        'Tasso (%)': [1.875, 2.375, 'EURIBOR + 150bps', 'N/A'],
-        'Scadenza': ['2026', '2028', '2025', 'Varie'],
-        'Note': ['Fisso', 'Fisso', 'Variabile', 'Affitti capitalizzati']
-    }
-    
-    df_debt_structure = pd.DataFrame(debt_structure)
-    
-    # Formattazione corretta della struttura del debito
-    st.dataframe(
-        df_debt_structure,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Strumento": st.column_config.TextColumn(
-                "Strumento",
-                help="Tipologia di strumento di debito"
-            ),
-            "Importo (€M)": st.column_config.NumberColumn(
-                "Importo (€M)",
-                help="Importo in milioni di euro",
-                format="%.0f"
-            ),
-            "Tasso (%)": st.column_config.Column(
-                "Tasso (%)",
-                help="Tasso di interesse applicato"
-            ),
-            "Scadenza": st.column_config.TextColumn(
-                "Scadenza",
-                help="Anno di scadenza"
-            ),
-            "Note": st.column_config.TextColumn(
-                "Note",
-                help="Informazioni aggiuntive"
-            )
+    # Struttura del debito - CORRETTO CON EXPANDER
+    with st.expander("💳 Struttura del Debito", expanded=True):
+        debt_structure = {
+            'Strumento': ['Bond 2026', 'Bond 2028', 'Term Loan', 'Leasing IFRS16'],
+            'Importo (€M)': [750, 1000, 1000, 1000],
+            'Tasso (%)': [1.875, 2.375, 'EURIBOR + 150bps', 'N/A'],
+            'Scadenza': ['2026', '2028', '2025', 'Varie'],
+            'Note': ['Fisso', 'Fisso', 'Variabile', 'Affitti capitalizzati']
         }
-    )
+        
+        df_debt_structure = pd.DataFrame(debt_structure)
+        
+        # Formattazione corretta della struttura del debito
+        st.dataframe(
+            df_debt_structure,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Strumento": st.column_config.TextColumn(
+                    "Strumento",
+                    help="Tipologia di strumento di debito"
+                ),
+                "Importo (€M)": st.column_config.NumberColumn(
+                    "Importo (€M)",
+                    help="Importo in milioni di euro",
+                    format="%.0f"
+                ),
+                "Tasso (%)": st.column_config.Column(
+                    "Tasso (%)",
+                    help="Tasso di interesse applicato"
+                ),
+                "Scadenza": st.column_config.TextColumn(
+                    "Scadenza",
+                    help="Anno di scadenza"
+                ),
+                "Note": st.column_config.TextColumn(
+                    "Note",
+                    help="Informazioni aggiuntive"
+                )
+            }
+        )
     
     st.info("""
     **📊 Analisi Struttura Debito:**
@@ -1020,54 +1016,53 @@ elif section_id == "peer_comparison":
     
     st.plotly_chart(fig_yield_comp, use_container_width=True)
     
-    # Tabella confronto multipli - CORRETTO
-    st.subheader("📈 Confronto Multipli di Valutazione")
-    
-    multiples_comparison = {
-        'Società': ['INWIT', 'Cellnex', 'American Tower (US)', 'Vantage Towers', 'Media Settore'],
-        'EV/EBITDA 2024E': [15.0, 14.2, 21.5, 12.8, 16.0],
-        'P/E 2024E': [23.5, 'N/A', 32.0, 18.5, 25.0],
-        'Dividend Yield (%)': [4.6, 0.0, 3.3, 0.0, 2.8],
-        'Net Debt/EBITDA': [3.8, 4.0, 5.5, 3.2, 4.1],
-        'Geografie': ['Italia', 'Europa', 'Globale', 'Europa', '']
-    }
-    
-    df_multiples = pd.DataFrame(multiples_comparison)
-    
-    # Formattazione corretta dei multipli
-    st.dataframe(
-        df_multiples,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Società": st.column_config.TextColumn(
-                "Società",
-                help="Nome dell'azienda"
-            ),
-            "EV/EBITDA 2024E": st.column_config.Column(
-                "EV/EBITDA 2024E",
-                help="Enterprise Value / EBITDA"
-            ),
-            "P/E 2024E": st.column_config.Column(
-                "P/E 2024E",
-                help="Price / Earnings"
-            ),
-            "Dividend Yield (%)": st.column_config.NumberColumn(
-                "Dividend Yield (%)",
-                help="Rendimento dividendi",
-                format="%.1f%%"
-            ),
-            "Net Debt/EBITDA": st.column_config.NumberColumn(
-                "Net Debt/EBITDA",
-                help="Leva finanziaria",
-                format="%.1f"
-            ),
-            "Geografie": st.column_config.TextColumn(
-                "Geografie",
-                help="Mercati geografici principali"
-            )
+    # Tabella confronto multipli - CORRETTO CON EXPANDER
+    with st.expander("📈 Confronto Multipli di Valutazione", expanded=True):
+        multiples_comparison = {
+            'Società': ['INWIT', 'Cellnex', 'American Tower (US)', 'Vantage Towers', 'Media Settore'],
+            'EV/EBITDA 2024E': [15.0, 14.2, 21.5, 12.8, 16.0],
+            'P/E 2024E': [23.5, 'N/A', 32.0, 18.5, 25.0],
+            'Dividend Yield (%)': [4.6, 0.0, 3.3, 0.0, 2.8],
+            'Net Debt/EBITDA': [3.8, 4.0, 5.5, 3.2, 4.1],
+            'Geografie': ['Italia', 'Europa', 'Globale', 'Europa', '']
         }
-    )
+        
+        df_multiples = pd.DataFrame(multiples_comparison)
+        
+        # Formattazione corretta dei multipli
+        st.dataframe(
+            df_multiples,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Società": st.column_config.TextColumn(
+                    "Società",
+                    help="Nome dell'azienda"
+                ),
+                "EV/EBITDA 2024E": st.column_config.Column(
+                    "EV/EBITDA 2024E",
+                    help="Enterprise Value / EBITDA"
+                ),
+                "P/E 2024E": st.column_config.Column(
+                    "P/E 2024E",
+                    help="Price / Earnings"
+                ),
+                "Dividend Yield (%)": st.column_config.NumberColumn(
+                    "Dividend Yield (%)",
+                    help="Rendimento dividendi",
+                    format="%.1f%%"
+                ),
+                "Net Debt/EBITDA": st.column_config.NumberColumn(
+                    "Net Debt/EBITDA",
+                    help="Leva finanziaria",
+                    format="%.1f"
+                ),
+                "Geografie": st.column_config.TextColumn(
+                    "Geografie",
+                    help="Mercati geografici principali"
+                )
+            }
+        )
     
     # Posizionamento competitivo
     st.markdown("""
@@ -1178,12 +1173,12 @@ elif section_id == "full_analysis":
         
         # Sections 1 & 2
         if len(sections) > 0:
-            st.markdown(f'<div class="section-title">1. Descrizione Aziendale</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[0]}</div>', unsafe_allow_html=True)
+            with st.expander("1. Descrizione Aziendale", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[0]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 1:
-            st.markdown(f'<div class="section-title">2. Management & Governance</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[1]}</div>', unsafe_allow_html=True)
+            with st.expander("2. Management & Governance", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[1]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
@@ -1200,20 +1195,20 @@ elif section_id == "full_analysis":
     # Tab 2: Business & Strategy
     with tabs[1]:
         if len(sections) > 2:
-            st.markdown(f'<div class="section-title">3. Piano Industriale & Strategia</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[2]}</div>', unsafe_allow_html=True)
+            with st.expander("3. Piano Industriale & Strategia", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[2]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 3:
-            st.markdown(f'<div class="section-title">4. Outlook Macroeconomico & Tassi</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[3]}</div>', unsafe_allow_html=True)
+            with st.expander("4. Outlook Macroeconomico & Tassi", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[3]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 4:
-            st.markdown(f'<div class="section-title">5. Analisi PESTEL</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[4]}</div>', unsafe_allow_html=True)
+            with st.expander("5. Analisi PESTEL", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[4]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 5:
-            st.markdown(f'<div class="section-title">6. Analisi delle 5 Forze di Porter</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[5]}</div>', unsafe_allow_html=True)
+            with st.expander("6. Analisi delle 5 Forze di Porter", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[5]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
@@ -1230,16 +1225,16 @@ elif section_id == "full_analysis":
     # Tab 3: Analisi Finanziaria
     with tabs[2]:
         if len(sections) > 6:
-            st.markdown(f'<div class="section-title">7. Andamento Storico dei Dividendi</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[6]}</div>', unsafe_allow_html=True)
+            with st.expander("7. Andamento Storico dei Dividendi", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[6]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 7:
-            st.markdown(f'<div class="section-title">8. Performance Finanziaria (ultimi 5 anni)</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[7]}</div>', unsafe_allow_html=True)
+            with st.expander("8. Performance Finanziaria (ultimi 5 anni)", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[7]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 14:
-            st.markdown(f'<div class="section-title">15. Total Shareholder Return (TSR) comparato</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[14]}</div>', unsafe_allow_html=True)
+            with st.expander("15. Total Shareholder Return (TSR) comparato", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[14]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
@@ -1256,16 +1251,16 @@ elif section_id == "full_analysis":
     # Tab 4: Valutazione & Scenari
     with tabs[3]:
         if len(sections) > 8:
-            st.markdown(f'<div class="section-title">9. Valutazione</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[8]}</div>', unsafe_allow_html=True)
+            with st.expander("9. Valutazione", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[8]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 9:
-            st.markdown(f'<div class="section-title">10. Scenario & Sensitivity Analysis</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[9]}</div>', unsafe_allow_html=True)
+            with st.expander("10. Scenario & Sensitivity Analysis", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[9]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 15:
-            st.markdown(f'<div class="section-title">16. Impatto Fiscale sui Dividendi</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[15]}</div>', unsafe_allow_html=True)
+            with st.expander("16. Impatto Fiscale sui Dividendi", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[15]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
@@ -1282,16 +1277,16 @@ elif section_id == "full_analysis":
     # Tab 5: Rischi & Opportunità
     with tabs[4]:
         if len(sections) > 12:
-            st.markdown(f'<div class="section-title">13. Rischi & Catalyst</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[12]}</div>', unsafe_allow_html=True)
+            with st.expander("13. Rischi & Catalyst", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[12]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 10:
-            st.markdown(f'<div class="section-title">11. Regolamentazione & Rischi Normativi</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[10]}</div>', unsafe_allow_html=True)
+            with st.expander("11. Regolamentazione & Rischi Normativi", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[10]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 13:
-            st.markdown(f'<div class="section-title">14. Liquidità & Flottante Azionario</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[13]}</div>', unsafe_allow_html=True)
+            with st.expander("14. Liquidità & Flottante Azionario", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[13]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
@@ -1308,16 +1303,16 @@ elif section_id == "full_analysis":
     # Tab 6: Governance & ESG
     with tabs[5]:
         if len(sections) > 11:
-            st.markdown(f'<div class="section-title">12. ESG & Sustainability</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[11]}</div>', unsafe_allow_html=True)
+            with st.expander("12. ESG & Sustainability", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[11]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 16:
-            st.markdown(f'<div class="section-title">17. Appendice & Metodologia</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section">{sections[16]}</div>', unsafe_allow_html=True)
+            with st.expander("17. Appendice & Metodologia", expanded=True):
+                st.markdown(f'<div class="analysis-section">{sections[16]}</div>', unsafe_allow_html=True)
         
         if len(sections) > 17:
-            st.markdown(f'<div class="section-title">18. Conclusione & Valutazione Finale</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="analysis-section highlight-section">{sections[17]}</div>', unsafe_allow_html=True)
+            with st.expander("18. Conclusione & Valutazione Finale", expanded=True):
+                st.markdown(f'<div class="analysis-section highlight-section">{sections[17]}</div>', unsafe_allow_html=True)
         
         # Footer standard con disclaimer
         st.markdown("---")
